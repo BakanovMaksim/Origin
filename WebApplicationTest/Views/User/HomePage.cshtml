@@ -1,0 +1,16 @@
+﻿@model WebApplicationTest.Models.User
+
+@{
+    Layout = "_Layout";
+
+    ViewBag.Title = "Главная";
+}
+
+@using (Html.BeginForm())
+{
+    <label class="textbox">Имя: @Html.TextBoxFor(x => x.FirstName)</label>
+    <label class="textbox">Фамилия: @Html.TextBoxFor(x => x.LastName)</label>
+
+    <input class="button" type="submit" value="Добавить" />
+}
+
