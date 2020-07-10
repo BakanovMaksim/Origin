@@ -6,8 +6,10 @@
     ViewBag.Title = "Главная";
 }
 
+@ViewBag.MessageError
 @using (Html.BeginForm())
 {
+    @Html.ValidationSummary()
     <label class="textbox">Имя: @Html.TextBoxFor(x => x.FirstName)</label>
     <label class="textbox">Фамилия: @Html.TextBoxFor(x => x.LastName)</label>
 

@@ -4,7 +4,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore;
-using MySql.Data.Common;
 using WebApplicationTest.DB;
 
 namespace WebApplicationTest
@@ -21,9 +20,10 @@ namespace WebApplicationTest
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            string connection = Configuration.GetConnectionString("UsersConnection");
+            var connection = Configuration.GetConnectionString("UsersConnection");
 
             services.AddDbContext<UserContext>(options => options.UseSqlServer(connection));
+            services.AddScoped<IDBDependency, DBDependency>();
 
             services.AddControllersWithViews();
         }
@@ -52,7 +52,7 @@ namespace WebApplicationTest
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=User}/{action=HomePage}/{id?}");
+                    pattern: "{controller=Home}/{action=HomePage}/{id?}");
             });
         }
     }

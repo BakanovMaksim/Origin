@@ -1,28 +1,35 @@
 ﻿using System;
-using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using WebApplicationTest.DB;
 using WebApplicationTest.Models;
 
 namespace WebApplicationTest.Controllers
 {
-    public class UserController : Controller
+    public class HomeController : Controller
     {
-        public DBMySQL DB { get; }
+        public DBDependency DB { get; }
 
-        public UserController(UserContext userContext) => DB = new DBMySQL(userContext);
+        public HomeController(IDBDependency dB) => DB = (DBDependency)dB;
 
         [HttpGet]
         public IActionResult HomePage() => View();
 
         [HttpPost]
-        public string HomePage(User user)
+        public ViewResult HomePage(User user)
         {
             if (user == null) throw new ArgumentNullException("Данные пользователя не могут быть пустыми.", nameof(user));
 
-            if (!ModelState.IsValid) return "Введены некорректные данные";
+            if (!ModelState.IsValid) return View();
 
-            return DB.ListPeople(user) ? DB.Add(user) : "Такой пользователь уже существует";
+            if (!DB.CheckNewUser(user))
+            {
+                ViewBag.MessageError = "Такой пользователь уже существует.";
+                return View();
+            }
+           
+            DB.Add(user); ;
+
+            return View();
         }  
     }
 }
