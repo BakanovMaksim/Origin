@@ -1,6 +1,5 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace WebApplicationTest.Models
 {
@@ -12,6 +11,7 @@ namespace WebApplicationTest.Models
         /// <summary>
         /// Идентификатор пользователя для бд.
         /// </summary>
+        [Key]
         public int Id { get; set; }
 
         /// <summary>

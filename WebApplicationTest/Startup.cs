@@ -4,7 +4,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore;
-using WebApplicationTest.DB;
+using WebApplicationTest.Data;
+using WebApplicationTest.Services;
 
 namespace WebApplicationTest
 {
@@ -22,8 +23,8 @@ namespace WebApplicationTest
         {
             var connection = Configuration.GetConnectionString("UsersConnection");
 
-            services.AddDbContext<UserContext>(options => options.UseSqlServer(connection));
-            services.AddScoped<IDBDependency, DBDependency>();
+            services.AddDbContext<UsersDbContext>(options => options.UseSqlServer(connection));
+            services.AddScoped<IDbLogic, UsersDbServices>();
 
             services.AddControllersWithViews();
         }

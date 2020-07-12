@@ -1,15 +1,15 @@
 ﻿using System;
 using Microsoft.AspNetCore.Mvc;
-using WebApplicationTest.DB;
 using WebApplicationTest.Models;
+using WebApplicationTest.Services;
 
 namespace WebApplicationTest.Controllers
 {
     public class HomeController : Controller
     {
-        public DBDependency DB { get; }
+        public IDbLogic Db { get; }
 
-        public HomeController(IDBDependency dB) => DB = (DBDependency)dB;
+        public HomeController(IDbLogic dB) => Db = dB;
 
         [HttpGet]
         public IActionResult HomePage() => View();
@@ -20,14 +20,8 @@ namespace WebApplicationTest.Controllers
             if (user == null) throw new ArgumentNullException("Данные пользователя не могут быть пустыми.", nameof(user));
 
             if (!ModelState.IsValid) return View();
-
-            if (!DB.CheckNewUser(user))
-            {
-                ViewBag.MessageError = "Такой пользователь уже существует.";
-                return View();
-            }
            
-            DB.Add(user); ;
+            Db.Add(user); ;
 
             return View();
         }  
