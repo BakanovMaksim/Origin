@@ -1,7 +1,8 @@
 ﻿using System;
-using WebApplicationTest.Models;
+using System.Collections.Generic;
+using ApplicationOrigin.Models;
 
-namespace WebApplicationTest.Services
+namespace ApplicationOrigin.Services
 {
     /// <summary>
     /// Общая логика для бд.
@@ -9,10 +10,27 @@ namespace WebApplicationTest.Services
     public interface IDbLogic
     {
         /// <summary>
+        /// Список пользователей.
+        /// </summary>
+        IEnumerable<User> Users { get; }
+
+        /// <summary>
         /// Добавление пользователя.
         /// </summary>
         /// <param name="user"> Пользователь. </param>
         void Add(User user);
+
+        /// <summary>
+        /// Изменение данных пользователя.
+        /// </summary>
+        /// <param name="user"> Пользователь. </param>
+        void Edit(User user);
+
+        /// <summary>
+        /// Удаление пользователя.
+        /// </summary>
+        /// <param name="user"> Пользователь. </param>
+        void Remove(User user);
 
         /// <summary>
         /// Проверка на наличие оригнальных данных.

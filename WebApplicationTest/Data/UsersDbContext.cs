@@ -1,8 +1,8 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore;
-using WebApplicationTest.Models;
+using ApplicationOrigin.Models;
 
-namespace WebApplicationTest.Data
+namespace ApplicationOrigin.Data
 {
     /// <summary>
     /// Контекст пользователя.

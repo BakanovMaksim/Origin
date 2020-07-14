@@ -1,29 +1,69 @@
 ﻿using System;
 using Microsoft.AspNetCore.Mvc;
-using WebApplicationTest.Models;
-using WebApplicationTest.Services;
+using ApplicationOrigin.Models;
+using ApplicationOrigin.Services;
+using System.Linq;
 
-namespace WebApplicationTest.Controllers
+namespace ApplicationOrigin.Controllers
 {
-    public class HomeController : Controller
+    public class AccountController : Controller
     {
+        public User CurrentUser { get; private set; }
+
         public IDbLogic Db { get; }
 
-        public HomeController(IDbLogic dB) => Db = dB;
+        public AccountController(IDbLogic db) => Db = db;
 
+        #region Авторизация
         [HttpGet]
-        public IActionResult HomePage() => View();
+        public ViewResult AuthorizationPage() => View();
 
         [HttpPost]
-        public ViewResult HomePage(User user)
+        public ViewResult AuthorizationPage(User user)
+        {
+            foreach (var item in Db.Users)
+                if (item.Login == user.Login && item.Password == user.Password)
+                {
+                    CurrentUser = item;
+                    return View("PersonalAccountPage");
+                }
+
+            return View();
+        }
+        #endregion
+
+        #region Регистрация
+        [HttpGet]
+        public ActionResult RegistrationPage() => View();
+
+        [HttpPost]
+        public ActionResult RegistrationPage(User user)
         {
             if (user == null) throw new ArgumentNullException("Данные пользователя не могут быть пустыми.", nameof(user));
 
             if (!ModelState.IsValid) return View();
-           
+
             Db.Add(user); ;
 
-            return View();
-        }  
+            return Redirect("~/Account/AuthorizationPage");
+        }
+        #endregion
+
+        #region Личный кабинет
+        [HttpGet]
+        public ActionResult PersonalAccountPage() => View();
+
+        [HttpPost]
+        public ActionResult PersonalAccountPage(User user)
+        {
+            Db.Remove(user);
+
+            return RedirectToAction("~/Account/HomePage");
+        }
+        #endregion
+
+        #region Главная
+        public ViewResult HomePage() => View(Db.Users.ToList());
+        #endregion
     }
 }
