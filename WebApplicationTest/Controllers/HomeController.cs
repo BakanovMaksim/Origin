@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using ApplicationOrigin.Models;
 using ApplicationOrigin.Services;
-using System.Linq;
 
 namespace ApplicationOrigin.Controllers
 {
@@ -21,7 +20,7 @@ namespace ApplicationOrigin.Controllers
         [HttpPost]
         public ViewResult AuthorizationPage(User user)
         {
-            foreach (var item in Db.Users)
+            foreach (var item in Db.GetUsers())
                 if (item.Login == user.Login && item.Password == user.Password)
                 {
                     CurrentUser = item;
@@ -49,21 +48,51 @@ namespace ApplicationOrigin.Controllers
         }
         #endregion
 
-        #region Личный кабинет
-        [HttpGet]
-        public ActionResult PersonalAccountPage() => View();
+        #region Главная
+        public ViewResult HomePage() => View(Db.GetUsers());
+        #endregion
 
-        [HttpPost]
-        public ActionResult PersonalAccountPage(User user)
+        #region Информация
+        public IActionResult InformationPage(int id)
         {
-            Db.Remove(user);
+            if (Db.GetUser(id) != null) return View(Db.GetUser(id));
 
-            return RedirectToAction("~/Account/HomePage");
+            return NotFound();
         }
         #endregion
 
-        #region Главная
-        public ViewResult HomePage() => View(Db.Users.ToList());
+        #region Изменение данных
+        [HttpGet]
+        public IActionResult EditPage(int id)
+        {
+            if (Db.GetUser(id) != null) return View(Db.GetUser(id));
+
+            return NotFound();
+        }
+        
+        [HttpPost]
+        public IActionResult EditPage(User user)
+        {
+            Db.Edit(user);
+            return RedirectToAction("HomePage");
+        }
         #endregion
+
+        [HttpGet]
+        [ActionName("RemovePage")]
+        public IActionResult ConfirmRemovePage(int id)
+        {
+            if (Db.GetUser(id) != null) return View(Db.GetUser(id));
+
+            return NotFound();
+        }
+
+        [HttpPost]
+        public IActionResult RemovePage(int id)
+        {
+            if(Db.GetUser(id) != null) Db.Remove(Db.GetUser(id));
+
+            return RedirectToAction("HomePage");
+        }
     }
 }

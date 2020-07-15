@@ -1,0 +1,35 @@
+﻿@model User
+
+@{
+    Layout = "_Layout";
+
+    ViewBag.Title = "Удаление данных";
+}
+
+    <div>
+        <dl>
+            <dt>Имя</dt>
+            <dd>
+                @Html.DisplayFor(x => x.FirstName)
+            </dd>
+
+            <dt>Фамилия</dt>
+            <dd>
+                @Html.DisplayFor(x => x.LastName)
+            </dd>
+
+            <dt>Логин</dt>
+            <dd>
+                @Html.DisplayFor(x => x.Login)
+            </dd>
+        </dl>
+
+        <div>
+            <form asp-controller="Account" asp-action="RemovePage" method="post">
+                <div>
+                    <input type="submit" value="Удалить" />
+                </div>
+            </form>
+        </div>
+    </div>
+

@@ -10,9 +10,17 @@ namespace ApplicationOrigin.Services
     public interface IDbLogic
     {
         /// <summary>
-        /// Список пользователей.
+        /// Получение пользователя по идентификатору.
         /// </summary>
-        IEnumerable<User> Users { get; }
+        /// <param name="id"> Идентификатор. </param>
+        /// <returns> Пользователь. </returns>
+        User GetUser(int id);
+
+        /// <summary>
+        /// Загрузка всех пользователей.
+        /// </summary>
+        /// <returns> Список пользователей. </returns>
+        IEnumerable<User> GetUsers();
 
         /// <summary>
         /// Добавление пользователя.

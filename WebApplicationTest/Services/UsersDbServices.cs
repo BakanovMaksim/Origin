@@ -3,7 +3,6 @@ using System.Linq;
 using System.Collections.Generic;
 using ApplicationOrigin.Models;
 using ApplicationOrigin.Data;
-using Microsoft.EntityFrameworkCore;
 
 namespace ApplicationOrigin.Services
 {
@@ -11,13 +10,11 @@ namespace ApplicationOrigin.Services
     {
         public UsersDbContext UsersDbContext { get; set; }
 
-        public IEnumerable<User> Users { get; }
+        public UsersDbServices(UsersDbContext usersDbContext) => UsersDbContext = usersDbContext;
 
-        public UsersDbServices(UsersDbContext usersDbContext)
-        {
-            UsersDbContext = usersDbContext;
-            Users = UsersDbContext.People.ToList();
-        }
+        public User GetUser(int id) => UsersDbContext.People.FirstOrDefault(p => p.Id == id);
+
+        public IEnumerable<User> GetUsers() => UsersDbContext.People.ToList();
 
         public void Add(User user)
         {
@@ -30,7 +27,7 @@ namespace ApplicationOrigin.Services
 
         public void Edit(User user)
         {
-            UsersDbContext.Entry(user).State = EntityState.Modified;
+            UsersDbContext.People.Update(user);
             UsersDbContext.SaveChanges();
         }
 
@@ -44,7 +41,7 @@ namespace ApplicationOrigin.Services
         {
             var count = 0;
 
-            foreach(var item in Users)
+            foreach (var item in GetUsers())
                 if ((item.Login == user.Login) && (item.Password == user.Password)) ++count;
 
             return count > 0 ? throw new ArgumentException("Такой пользователь уже существует.", nameof(user)) : true;

@@ -13,12 +13,19 @@
 <body>
     @Html.ActionLink("Авторизация", "AuthorizationPage")
 
-    <select multiple>
-        @foreach(var item in Model)
-        {
-            <option>@item</option>
-        }
-    </select>
+        <table>
+            <tr><td>№</td><td>Пользователь</td></tr>
+            @foreach (var item in Model)
+            {
+        <tr>
+            <td>@item.Id</td>
+            <td>@item</td>
+            <td><a asp-action="InformationPage" asp-controller="Account" asp-route-id="@item.Id">Информация</a></td>
+            <td><a asp-action="EditPage" asp-controller="Account" asp-route-id="@item.Id">Изменение</a></td>
+            <td><a asp-action="RemovePage" asp-controller="Account" asp-route-id="@item.Id">Удалить</a></td>
+        </tr>
+            }
+        </table>
 </body>
 </html>
 

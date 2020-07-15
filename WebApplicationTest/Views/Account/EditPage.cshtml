@@ -1,0 +1,29 @@
+﻿@model User
+
+@{
+    Layout = "_Layout";
+    ViewBag.Title = "Изменение данных";
+}
+
+    <form asp-action="EditPage" asp-controller="account" asp-route-id="@Model.Id">
+        <div>
+            <label asp-for="FirstName">Имя</label>
+            <input type="text" asp-for="FirstName" />
+        </div>
+        <div>
+            <label asp-for="LastName">Фамилия</label>
+            <input type="text" asp-for="LastName" />
+        </div>
+        <div>
+            <label asp-for="Login">Логин</label>
+            <input type="text" asp-for="Login" />
+        </div>
+        <div>
+            <label asp-for="Password">Пароль</label>
+            <input type="text" asp-for="Password" />
+        </div>
+        <div>
+            <input type="submit" value="Сохранить" />
+        </div>
+    </form>
+
