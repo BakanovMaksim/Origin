@@ -3,42 +3,73 @@ using System.Linq;
 using System.Collections.Generic;
 using ApplicationOrigin.Models;
 using ApplicationOrigin.Data;
+using Microsoft.Extensions.Logging;
 
 namespace ApplicationOrigin.Services
 {
     public class UsersDbServices : IDbLogic
     {
-        public UsersDbContext UsersDbContext { get; set; }
+        private readonly ILogger<UsersDbServices> _logger;
 
-        public UsersDbServices(UsersDbContext usersDbContext) => UsersDbContext = usersDbContext;
+        public UsersDbContext UsersDbContext { get; }
 
-        public User GetUser(int id) => UsersDbContext.People.FirstOrDefault(p => p.Id == id);
+        public UsersDbServices(UsersDbContext usersDbContext,ILogger<UsersDbServices> logger)
+        {
+            UsersDbContext = usersDbContext;
+            _logger = logger;
 
-        public IEnumerable<User> GetUsers() => UsersDbContext.People.ToList();
+            _logger.LogDebug("База данных пользователей.");
+        }
+
+        public User GetUser(int id)
+        {
+            _logger.LogInformation("Получен пользователь по идентификатору.", id);
+
+            return UsersDbContext.People.FirstOrDefault(p => p.Id == id);
+        }
+
+        public IEnumerable<User> GetUsers()
+        {
+            _logger.LogInformation("Получен список пользователей.");
+
+            return UsersDbContext.People.ToList();
+        }
 
         public void Add(User user)
         {
+            _logger.LogInformation("Данные пользователя получены.", nameof(user));
+
             if (CheckNewUser(user))
-            {
+            { 
                 UsersDbContext.People.Add(user);
                 UsersDbContext.SaveChanges();
+
+                _logger.LogInformation("Пользователь добавлен в базу данных.", nameof(user));
             }
+
+            _logger.LogWarning("Пользователь не добавлен в базу данных.", nameof(user));
         }
 
         public void Edit(User user)
         {
+            _logger.LogInformation("Данные пользователя получены.", nameof(user));
+
             UsersDbContext.People.Update(user);
             UsersDbContext.SaveChanges();
         }
 
         public void Remove(User user)
         {
+            _logger.LogInformation("Данные пользователя получены.", nameof(user));
+
             UsersDbContext.People.Remove(user);
             UsersDbContext.SaveChanges();
         }
 
         public bool CheckNewUser(User user)
         {
+            _logger.LogInformation("Данные пользователя получены.", nameof(user));
+
             var count = 0;
 
             foreach (var item in GetUsers())

@@ -2,17 +2,25 @@
 using Microsoft.AspNetCore.Mvc;
 using ApplicationOrigin.Models;
 using ApplicationOrigin.Services;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using Microsoft.Extensions.Logging;
 
 namespace ApplicationOrigin.Controllers
 {
     public class AccountController : Controller
     {
-        public User CurrentUser { get; private set; }
+        private readonly ILogger<AccountController> _logger;
 
         public IDbLogic Db { get; }
 
-        public AccountController(IDbLogic db) => Db = db;
+        public User CurrentUser { get; private set; }
+
+        public AccountController(IDbLogic db,ILogger<AccountController> logger)
+        {
+            Db = db;
+            _logger = logger;
+
+            _logger.LogDebug("Controller AccountController.");
+        }
 
         #region Авторизация
         [HttpGet]
@@ -21,12 +29,18 @@ namespace ApplicationOrigin.Controllers
         [HttpPost]
         public IActionResult AuthorizationPage(User user)
         {
+            _logger.LogInformation("Данные пользователя получены.", nameof(user));
+
             foreach (var item in Db.GetUsers())
                 if (item.Login == user.Login && item.Password == user.Password)
                 {
+                    _logger.LogInformation("Авторизация выполнена успешно.", nameof(user));
+
                     CurrentUser = item;
                     return RedirectToAction("HomePage");
                 }
+
+            _logger.LogWarning("Авторизация не выполнена.", nameof(user));
 
             return View();
         }
@@ -39,11 +53,17 @@ namespace ApplicationOrigin.Controllers
         [HttpPost]
         public IActionResult RegistrationPage(User user)
         {
+            _logger.LogInformation("Данные пользователя получены.", nameof(user));
+
             if (user == null) throw new ArgumentNullException("Данные пользователя не могут быть пустыми.", nameof(user));
 
-            if (!ModelState.IsValid) return View();
+            if (!ModelState.IsValid)
+            {
+                _logger.LogWarning("Не все текстовые поля заполнены.");
+                return View();
+            }
 
-            Db.Add(user); ;
+            Db.Add(user); 
 
             return RedirectToAction("AuthorizationPage");
         }
@@ -57,6 +77,8 @@ namespace ApplicationOrigin.Controllers
         public IActionResult InformationPage(int id)
         {
             if (Db.GetUser(id) != null) return View(Db.GetUser(id));
+
+            _logger.LogWarning("Просмотр информации не возможен.", id);
 
             return NotFound();
         }
@@ -74,6 +96,8 @@ namespace ApplicationOrigin.Controllers
         [HttpPost]
         public IActionResult EditPage(User user)
         {
+            _logger.LogInformation("Данные пользователя получены.", nameof(user));
+
             Db.Edit(user);
             return RedirectToAction("HomePage");
         }
@@ -93,6 +117,8 @@ namespace ApplicationOrigin.Controllers
         public IActionResult RemovePage(int id)
         {
             if(Db.GetUser(id) != null) Db.Remove(Db.GetUser(id));
+
+            _logger.LogInformation("Пользователь успешно удален.", id);
 
             return RedirectToAction("HomePage");
         }
