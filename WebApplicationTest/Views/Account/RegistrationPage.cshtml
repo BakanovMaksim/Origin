@@ -1,21 +1,18 @@
-﻿@model ApplicationOrigin.Models.User
+﻿@model User
 
 @{
-    Layout = "_Layout";
-
     ViewBag.Title = "Регистрация";
 }
 
 @ViewBag.MessageError
-@using (Html.BeginForm())
-{
-    @Html.ValidationSummary()
+    <form method="post">
+        <div asp-validation-summary="All"></div>
 
-    <label class="textbox">Имя: @Html.TextBoxFor(x => x.FirstName)</label>
-    <label class="textbox">Фамилия: @Html.TextBoxFor(x => x.LastName)</label>
-    <label class="textbox">Логин: @Html.TextBoxFor(x => x.Login)</label>
-    <label class="textbox">Пароль: @Html.PasswordFor(x => x.Password)</label>
+        <label class="textbox" asp-for="FirstName">Имя: <input type="text" asp-for="FirstName" placeholder="Введите имя" /></label>
+        <label class="textbox" asp-for="LastName">Фамилия: <input type="text" asp-for="LastName" placeholder="Введите фамилию" /></label>
+        <label class="textbox" asp-for="Login">Логин: <input type="text" asp-for="Login" placeholder="Введите логин" /></label>
+        <label class="textbox" asp-for="Password">Пароль: <input type="password" asp-for="Password" placeholder="Введите пароль" /></label>
 
-    <input class="button" type="submit" value="Зарегистрироваться" />
-}
+        <input class="button" type="submit" value="Зарегистрироваться" />
+    </form>
 

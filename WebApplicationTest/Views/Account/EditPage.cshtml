@@ -1,26 +1,22 @@
 ﻿@model User
 
 @{
-    Layout = "_Layout";
     ViewBag.Title = "Изменение данных";
 }
 
     <form asp-action="EditPage" asp-controller="account" asp-route-id="@Model.Id">
+        <div asp-validation-summary="All"></div>
         <div>
-            <label asp-for="FirstName">Имя</label>
-            <input type="text" asp-for="FirstName" />
+            <label asp-for="FirstName">Имя: <input type="text" asp-for="FirstName" placeholder="Введите имя"/></label>
         </div>
         <div>
-            <label asp-for="LastName">Фамилия</label>
-            <input type="text" asp-for="LastName" />
+            <label asp-for="LastName">Фамилия: <input type="text" asp-for="LastName" placeholder="Введите фамилию"/></label>
         </div>
         <div>
-            <label asp-for="Login">Логин</label>
-            <input type="text" asp-for="Login" />
+            <label asp-for="Login">Логин: <input type="text" asp-for="Login" placeholder="Введите логин"/></label>
         </div>
         <div>
-            <label asp-for="Password">Пароль</label>
-            <input type="text" asp-for="Password" />
+            <label asp-for="Password">Пароль: <input type="password" asp-for="Password" placeholder="Введите пароль"/></label>
         </div>
         <div>
             <input type="submit" value="Сохранить" />

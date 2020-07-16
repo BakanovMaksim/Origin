@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using ApplicationOrigin.Models;
 using ApplicationOrigin.Services;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace ApplicationOrigin.Controllers
 {
@@ -15,16 +16,16 @@ namespace ApplicationOrigin.Controllers
 
         #region Авторизация
         [HttpGet]
-        public ViewResult AuthorizationPage() => View();
+        public IActionResult AuthorizationPage() => View();
 
         [HttpPost]
-        public ViewResult AuthorizationPage(User user)
+        public IActionResult AuthorizationPage(User user)
         {
             foreach (var item in Db.GetUsers())
                 if (item.Login == user.Login && item.Password == user.Password)
                 {
                     CurrentUser = item;
-                    return View("PersonalAccountPage");
+                    return RedirectToAction("HomePage");
                 }
 
             return View();
@@ -33,10 +34,10 @@ namespace ApplicationOrigin.Controllers
 
         #region Регистрация
         [HttpGet]
-        public ActionResult RegistrationPage() => View();
+        public IActionResult RegistrationPage() => View();
 
         [HttpPost]
-        public ActionResult RegistrationPage(User user)
+        public IActionResult RegistrationPage(User user)
         {
             if (user == null) throw new ArgumentNullException("Данные пользователя не могут быть пустыми.", nameof(user));
 
@@ -44,7 +45,7 @@ namespace ApplicationOrigin.Controllers
 
             Db.Add(user); ;
 
-            return Redirect("~/Account/AuthorizationPage");
+            return RedirectToAction("AuthorizationPage");
         }
         #endregion
 
@@ -64,7 +65,7 @@ namespace ApplicationOrigin.Controllers
         #region Изменение данных
         [HttpGet]
         public IActionResult EditPage(int id)
-        {
+        { 
             if (Db.GetUser(id) != null) return View(Db.GetUser(id));
 
             return NotFound();
@@ -78,6 +79,7 @@ namespace ApplicationOrigin.Controllers
         }
         #endregion
 
+        #region Удаление данных
         [HttpGet]
         [ActionName("RemovePage")]
         public IActionResult ConfirmRemovePage(int id)
@@ -94,5 +96,6 @@ namespace ApplicationOrigin.Controllers
 
             return RedirectToAction("HomePage");
         }
+        #endregion
     }
 }
