@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using ApplicationOrigin.Models;
 using ApplicationOrigin.Services;
 using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Authorization;
 
 namespace ApplicationOrigin.Controllers
 {
@@ -21,10 +22,16 @@ namespace ApplicationOrigin.Controllers
         }
 
         #region Главная
-        public ViewResult HomePage() => View(Db.GetUsers());
+        [AllowAnonymous]
+        public ViewResult HomePage()
+        {
+            if (!string.IsNullOrEmpty(User.Identity.Name)) ViewBag.Message = $"Добро пожаловать {User.Identity.Name}";
+            return View(Db.GetUsers());
+        }
         #endregion
 
         #region Информация
+        [Authorize(Roles ="Administrator, Visitor")]
         public IActionResult InformationPage(int id)
         {
             if (Db.GetUser(id) != null) return View(Db.GetUser(id));
@@ -37,6 +44,7 @@ namespace ApplicationOrigin.Controllers
 
         #region Изменение данных
         [HttpGet]
+        [Authorize(Roles= "Administrator")]
         public IActionResult EditPage(int id)
         {
             if (Db.GetUser(id) != null) return View(Db.GetUser(id));
@@ -45,6 +53,7 @@ namespace ApplicationOrigin.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Administrator")]
         public IActionResult EditPage(User user)
         {
             _logger.LogInformation("Данные пользователя получены.", nameof(user));
@@ -58,6 +67,7 @@ namespace ApplicationOrigin.Controllers
         #region Удаление данных
         [HttpGet]
         [ActionName("RemovePage")]
+        [Authorize(Roles = "Administrator")]
         public IActionResult ConfirmRemovePage(int id)
         {
             if (Db.GetUser(id) != null) return View(Db.GetUser(id));
@@ -66,6 +76,7 @@ namespace ApplicationOrigin.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Administrator")]
         public IActionResult RemovePage(int id)
         {
             if (Db.GetUser(id) != null) Db.Remove(Db.GetUser(id));

@@ -46,6 +46,7 @@ namespace ApplicationOrigin.Models
         /// <summary>
         /// Роль.
         /// </summary>
+        [Display(Name ="Роль")]
         [Required(ErrorMessage ="Пожалуйста, выберете роль.")]
         public Roles Role { get; set; }
 

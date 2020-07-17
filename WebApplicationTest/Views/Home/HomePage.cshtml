@@ -12,7 +12,9 @@
 </head>
 <body>
     <a asp-controller="account" asp-action="AuthorizationPage">Авторизация</a>
-    <a asp-controller="account" asp-action="RegistrationPage">Регистрация</a>
+    <a asp-controller="account" asp-action="RegistrationPage">Регистрация</a><br />
+
+    <p>@ViewBag.Message</p>
 
         <table>
             <tr><td>№</td><td>Пользователь</td><td>Роль</td></tr>

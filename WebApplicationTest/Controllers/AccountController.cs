@@ -1,8 +1,13 @@
 ﻿using System;
+using System.Threading.Tasks;
+using System.Security.Claims;
+using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using ApplicationOrigin.Models;
 using ApplicationOrigin.Services;
-using Microsoft.Extensions.Logging;
 
 namespace ApplicationOrigin.Controllers
 { 
@@ -25,7 +30,7 @@ namespace ApplicationOrigin.Controllers
         public IActionResult AuthorizationPage() => View();
 
         [HttpPost]
-        public IActionResult AuthorizationPage(User user)
+        public async Task<IActionResult> AuthorizationPage(User user)
         {
             _logger.LogInformation("Данные пользователя получены.", nameof(user));
 
@@ -33,6 +38,8 @@ namespace ApplicationOrigin.Controllers
                 if (item.Login == user.Login && item.Password == user.Password)
                 {
                     _logger.LogInformation("Авторизация выполнена успешно.", nameof(user));
+
+                    await Authenticate(user);
 
                     return RedirectToAction("HomePage", "Home");
                 }
@@ -48,7 +55,7 @@ namespace ApplicationOrigin.Controllers
         public IActionResult RegistrationPage() => View();
 
         [HttpPost]
-        public IActionResult RegistrationPage(User user)
+        public async Task<IActionResult> RegistrationPage(User user)
         {
             _logger.LogInformation("Данные пользователя получены.", nameof(user));
 
@@ -63,8 +70,23 @@ namespace ApplicationOrigin.Controllers
 
             Db.Add(user);
 
+            await Authenticate(user);
+
             return RedirectToAction("HomePage", "Home");
         }
         #endregion
+
+        private async Task Authenticate(User user)
+        {
+            var claims = new List<Claim>
+            {
+                new Claim(ClaimsIdentity.DefaultNameClaimType, user.Login),
+                new Claim(ClaimsIdentity.DefaultRoleClaimType, user.Role.ToString())
+            };
+
+            var id = new ClaimsIdentity(claims, "ApplicationCookie", ClaimsIdentity.DefaultNameClaimType, ClaimsIdentity.DefaultRoleClaimType);
+
+            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(id));
+        }
     }
 }

@@ -8,6 +8,11 @@
         <div asp-validation-summary="All"></div>
 
         <div class="textbox">
+            <label asp-for="Role"></label>
+            <select asp-for="Role" asp-items="@Html.GetEnumSelectList<Roles>()">
+            </select>
+        </div>
+        <div class="textbox">
             <label asp-for="FirstName"></label>
             <input type="text" asp-for="FirstName" placeholder="Введите имя" />
         </div>
