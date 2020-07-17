@@ -1,12 +1,11 @@
 ﻿@model User
 
 @{
-    ViewBag.Title = "Регистрация";
+    ViewBag.Title = "Изменение данных";
 }
 
-    <form asp-controller="account" method="post">
+    <form asp-action="EditPage" asp-controller="home" asp-route-id="@Model.Id">
         <div asp-validation-summary="All"></div>
-
         <div class="textbox">
             <label asp-for="FirstName"></label>
             <input type="text" asp-for="FirstName" placeholder="Введите имя" />
@@ -24,6 +23,6 @@
             <input type="password" asp-for="Password" placeholder="Введите пароль" />
         </div>
 
-            <input class="button" type="submit" value="Зарегистрироваться" />
+            <input class="button" type="submit" value="Сохранить" />
     </form>
 

@@ -23,15 +23,13 @@ namespace ApplicationOrigin.Services
 
         public User GetUser(int id)
         {
-            _logger.LogInformation("Получен пользователь по идентификатору.", id);
+            _logger.LogInformation("Получен идентификатор пользователя.", id);
 
             return UsersDbContext.People.FirstOrDefault(p => p.Id == id);
         }
 
         public IEnumerable<User> GetUsers()
         {
-            _logger.LogInformation("Получен список пользователей.");
-
             return UsersDbContext.People.ToList();
         }
 

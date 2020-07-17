@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -24,6 +25,11 @@ namespace ApplicationOrigin
 
             services.AddDbContext<UsersDbContext>(options => options.UseMySql(connection));
             services.AddScoped<IDbLogic, UsersDbServices>();
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie(options =>
+                {
+                    options.LoginPath = new Microsoft.AspNetCore.Http.PathString("/Account/AuthorizationPage");
+                });
             services.AddControllersWithViews();
         }
 
@@ -43,13 +49,14 @@ namespace ApplicationOrigin
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Account}/{action=HomePage}/{id?}");
+                    pattern: "{controller=Home}/{action=HomePage}/{id?}");
             });
         }
     }

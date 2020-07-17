@@ -4,9 +4,18 @@
     ViewBag.Title = "Авторизация";
 }
 
-    <form method="post" asp-action="">
-        <label class="textbox" asp-for="Login">Логин: <input type="text" asp-for="Login" placeholder="Введите логин"/></label>
-        <label class="textbox" asp-for="Password">Пароль: <input type="password" asp-for="Password" placeholder="Введите пароль"/></label>
+    <form asp-controller="account" method="post">
+        <div asp-validation-summary="ModelOnly"></div>
+        <span asp-validation-for="Login"></span><br />
+        <span asp-validation-for="Password"></span>
+        <div class="textbox">
+            <label asp-for="Login"></label>
+            <input type="text" asp-for="Login" placeholder="Введите логин" />
+        </div>
+        <div class="textbox">
+            <label asp-for="Password"></label>
+            <input type="password" asp-for="Password" placeholder="Введите пароль" />
+        </div>
 
         <input class="button" type="submit" value="Войти" />
 

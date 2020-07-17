@@ -31,7 +31,6 @@
     <None Update="usersDataSet.xsd">
       <Generator>MSDataSetGenerator</Generator>
       <LastGenOutput>usersDataSet.Designer.cs</LastGenOutput>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
 
