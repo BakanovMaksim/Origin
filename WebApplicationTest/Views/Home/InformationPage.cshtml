@@ -1,17 +1,20 @@
-﻿@model User
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@model User
 
 @{
     ViewBag.Title = "Информация";
 }
 
+@inject IViewLocalizer Localizer
+
 <div>
-<h1>Пользователь @Model.Login</h1>
+<h1>@Localizer["User"] @Model.Login</h1>
 <div>
     <dl>
-        <dt>Идентификатор</dt>
+        <dt>@Localizer["Id"]</dt>
         <dd>@Model.Id</dd>
 
-        <dt>ФИ</dt>
+        <dt>@Localizer["Name"]</dt>
         <dd>@Model</dd>
     </dl>
 </div>

@@ -1,7 +1,19 @@
-﻿@model System.Collections.Generic.IEnumerable<User>
+﻿@using Microsoft.AspNetCore.Builder
+@using Microsoft.AspNetCore.Localization
+@using Microsoft.AspNetCore.Mvc.Localization;
+@using Microsoft.Extensions.Options;
+@model System.Collections.Generic.IEnumerable<User>
+
+@inject IViewLocalizer Localizer
+@inject IOptions<RequestLocalizationOptions> LocOptions
+
 
 @{ 
     Layout = null;
+
+    var requestCulture = Context.Features.Get<IRequestCultureFeature>();
+
+    var cultureItems = LocOptions.Value.SupportedUICultures.Select(p => new SelectListItem { Value = p.Name, Text = p.NativeName }).ToList();
 }
 
 <!DOCTYPE html>
@@ -12,23 +24,27 @@
     <link rel="stylesheet" href="~/css/home.css" />
 </head>
 <body>
-    <a class="button_registration" asp-controller="account" asp-action="AuthorizationPage">Войти</a>
-    <a class="button_registration" asp-controller="account" asp-action="RegistrationPage">Зарегистрироваться</a>
+    <a class="button_registration" asp-controller="account" asp-action="AuthorizationPage">@Localizer["Authorization"]</a>
+    <a class="button_registration" asp-controller="account" asp-action="RegistrationPage">@Localizer["Registration"]</a>
 
-    <h1>Пользователь - @ViewBag.Message</h1><hr />
+    <h1>@Localizer["UserColumn"] - @ViewBag.Message</h1><hr />
+
+    <form asp-controller="Home" asp-action="SetLanguage" asp-route-returnUrl="@Context.Request.Path" method="post">
+        @Localizer["ChangeCulture"]: <select name="culture" onchange="this.form.submit()" asp-for="@requestCulture.RequestCulture.UICulture.Name" asp-items="cultureItems"></select>
+    </form>
 
         <table class="table_users">
-            <caption>Пользователи</caption>
-            <tr><th>№</th><th>Пользователь</th><th>Роль</th></tr>
+            <caption>@Localizer["TableName"]</caption>
+            <tr><th>№</th><th>@Localizer["UserColumn"]</th><th>@Localizer["RoleColumn"]</th></tr>
             @foreach (var item in Model)
             {
         <tr>
             <td>@item.Id</td>
             <td>@item</td>
             <td>@item.Role</td>
-            <td><a asp-action="InformationPage" asp-controller="home" asp-route-id="@item.Id">Информация</a></td>
-            <td><a asp-action="EditPage" asp-controller="home" asp-route-id="@item.Id">Изменение</a></td>
-            <td><a asp-action="RemovePage" asp-controller="home" asp-route-id="@item.Id">Удалить</a></td>
+            <td><a asp-action="InformationPage" asp-controller="home" asp-route-id="@item.Id">@Localizer["BtnInfo"]</a></td>
+            <td><a asp-action="EditPage" asp-controller="home" asp-route-id="@item.Id">@Localizer["BtnEdit"]</a></td>
+            <td><a asp-action="RemovePage" asp-controller="home" asp-route-id="@item.Id">@Localizer["BtnRemove"]</a></td>
         </tr>
             }
         </table>

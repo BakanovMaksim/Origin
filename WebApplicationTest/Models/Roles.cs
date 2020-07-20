@@ -11,13 +11,13 @@ namespace ApplicationOrigin.Models
         /// <summary>
         /// Администратор.
         /// </summary>
-        [Display(Name = "Администратор")]
+        [Display(Name = "NameAdmin")]
         Administrator,
 
         /// <summary>
         /// Посетитель.
         /// </summary>
-        [Display(Name ="Посетитель")]
+        [Display(Name = "NameVisitor")]
         Visitor
     }
 }

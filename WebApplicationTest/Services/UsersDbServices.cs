@@ -28,10 +28,7 @@ namespace ApplicationOrigin.Services
             return UsersDbContext.People.FirstOrDefault(p => p.Id == id);
         }
 
-        public IEnumerable<User> GetUsers()
-        {
-            return UsersDbContext.People.ToList();
-        }
+        public IEnumerable<User> GetUsers() => UsersDbContext.People.ToList();
 
         public void Add(User user)
         {

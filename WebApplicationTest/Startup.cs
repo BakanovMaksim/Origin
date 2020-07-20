@@ -7,6 +7,8 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore;
 using ApplicationOrigin.Data;
 using ApplicationOrigin.Services;
+using System.Globalization;
+using Microsoft.AspNetCore.Localization;
 
 namespace ApplicationOrigin
 {
@@ -31,7 +33,21 @@ namespace ApplicationOrigin
                     options.LoginPath = new Microsoft.AspNetCore.Http.PathString("/Account/AuthorizationPage");
                     options.AccessDeniedPath = new Microsoft.AspNetCore.Http.PathString("/Account/AuthorizationPage");
                 });
-            services.AddControllersWithViews();
+            services.AddLocalization(options => options.ResourcesPath = "Resources");
+            services.AddControllersWithViews().AddDataAnnotationsLocalization().AddViewLocalization();
+
+            services.Configure<RequestLocalizationOptions>(options =>
+            {
+                var supportedCultures = new[]
+                {
+                    new CultureInfo("en"),
+                    new CultureInfo("ru")
+                };
+
+                options.DefaultRequestCulture = new RequestCulture("en");
+                options.SupportedCultures = supportedCultures;
+                options.SupportedUICultures = supportedCultures;
+            });
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -45,6 +61,8 @@ namespace ApplicationOrigin
                 app.UseExceptionHandler("/Home/Error");
                 app.UseHsts();
             }
+
+            app.UseRequestLocalization();
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 

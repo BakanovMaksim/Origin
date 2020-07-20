@@ -17,37 +17,37 @@ namespace ApplicationOrigin.Models
         /// <summary>
         /// Имя.
         /// </summary>
-        [Display(Name ="Имя")]
-        [Required(ErrorMessage ="Пожалуйста, введите имя.")]
+        [Display(Name = "FirstName")]
+        [Required(ErrorMessage = "FirstNameRequired")]
         public string FirstName { get; set; }
 
         /// <summary>
         /// Фамилия.
         /// </summary>
-        [Display(Name ="Фамилия")]
-        [Required(ErrorMessage ="Пожалуйста, введите фамилию.")]
+        [Display(Name = "LastName")]
+        [Required(ErrorMessage = "LastNameRequired")]
         public string LastName { get; set; }
 
         /// <summary>
         /// Логин.
         /// </summary>
-        [Display(Name ="Логин")]
-        [Required(ErrorMessage ="Пожалуйста, введите логин.")]
+        [Display(Name = "Login")]
+        [Required(ErrorMessage = "LoginRequired")]
         public string Login { get; set; }
 
         /// <summary>
         /// Пароль.
         /// </summary>
-        [Display(Name ="Пароль")]
-        [Required(ErrorMessage ="Пожалуйста, введите пароль.")]
-        [MinLength(8,ErrorMessage ="Длина пароля должна составлять минимум 8 символов.")]
+        [Display(Name = "Password")]
+        [Required(ErrorMessage = "PasswordRequired")]
+        [MinLength(8,ErrorMessage = "PasswordMinLength")]
         public string Password { get; set; }
 
         /// <summary>
         /// Роль.
         /// </summary>
-        [Display(Name ="Роль")]
-        [Required(ErrorMessage ="Пожалуйста, выберете роль.")]
+        [Display(Name = "Role")]
+        [Required(ErrorMessage = "RoleRequired")]
         public Roles Role { get; set; }
 
         public override string ToString() => $"{FirstName} {LastName}";

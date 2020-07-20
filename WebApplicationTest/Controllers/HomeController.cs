@@ -4,16 +4,19 @@ using ApplicationOrigin.Models;
 using ApplicationOrigin.Services;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Localization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Localization;
 
 namespace ApplicationOrigin.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<AccountController> _logger;
+        private readonly ILogger<HomeController> _logger;
 
         public IDbLogic Db { get; }
 
-        public HomeController(IDbLogic db, ILogger<AccountController> logger)
+        public HomeController(IDbLogic db, ILogger<HomeController> logger)
         {
             Db = db;
             _logger = logger;
@@ -23,12 +26,22 @@ namespace ApplicationOrigin.Controllers
 
         #region Главная
         [AllowAnonymous]
-        public ViewResult HomePage()
+        public IActionResult HomePage()
         {
             if (!string.IsNullOrEmpty(User.Identity.Name)) ViewBag.Message = User.Identity.Name;
-            else ViewBag.Message = "Гость";
+            else ViewBag.Message = "None";
 
             return View(Db.GetUsers());
+        }
+
+        [HttpPost]
+        public IActionResult SetLanguage(string culture, string returnUrl)
+        {
+            Response.Cookies.Append(CookieRequestCultureProvider.DefaultCookieName,
+                CookieRequestCultureProvider.MakeCookieValue(new RequestCulture(culture)),
+                new CookieOptions { Expires = DateTimeOffset.UtcNow.AddYears(1) });
+
+            return LocalRedirect(returnUrl);
         }
         #endregion
 
