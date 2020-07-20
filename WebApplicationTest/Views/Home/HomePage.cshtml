@@ -9,15 +9,17 @@
 <head>
     <meta name="viewport" content="width=device-width" />
     <title>Главная</title>
+    <link rel="stylesheet" href="~/css/home.css" />
 </head>
 <body>
-    <a asp-controller="account" asp-action="AuthorizationPage">Авторизация</a>
-    <a asp-controller="account" asp-action="RegistrationPage">Регистрация</a><br />
+    <a class="button_registration" asp-controller="account" asp-action="AuthorizationPage">Войти</a>
+    <a class="button_registration" asp-controller="account" asp-action="RegistrationPage">Зарегистрироваться</a>
 
-    <p>@ViewBag.Message</p>
+    <h1>Пользователь - @ViewBag.Message</h1><hr />
 
-        <table>
-            <tr><td>№</td><td>Пользователь</td><td>Роль</td></tr>
+        <table class="table_users">
+            <caption>Пользователи</caption>
+            <tr><th>№</th><th>Пользователь</th><th>Роль</th></tr>
             @foreach (var item in Model)
             {
         <tr>

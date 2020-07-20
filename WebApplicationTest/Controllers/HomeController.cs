@@ -25,7 +25,9 @@ namespace ApplicationOrigin.Controllers
         [AllowAnonymous]
         public ViewResult HomePage()
         {
-            if (!string.IsNullOrEmpty(User.Identity.Name)) ViewBag.Message = $"Добро пожаловать {User.Identity.Name}";
+            if (!string.IsNullOrEmpty(User.Identity.Name)) ViewBag.Message = User.Identity.Name;
+            else ViewBag.Message = "Гость";
+
             return View(Db.GetUsers());
         }
         #endregion
