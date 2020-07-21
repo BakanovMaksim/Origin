@@ -33,16 +33,6 @@ namespace ApplicationOrigin.Controllers
 
             return View(Db.GetUsers());
         }
-
-        [HttpPost]
-        public IActionResult SetLanguage(string culture, string returnUrl)
-        {
-            Response.Cookies.Append(CookieRequestCultureProvider.DefaultCookieName,
-                CookieRequestCultureProvider.MakeCookieValue(new RequestCulture(culture)),
-                new CookieOptions { Expires = DateTimeOffset.UtcNow.AddYears(1) });
-
-            return LocalRedirect(returnUrl);
-        }
         #endregion
 
         #region Информация
@@ -101,5 +91,15 @@ namespace ApplicationOrigin.Controllers
             return RedirectToAction("HomePage");
         }
         #endregion
+
+        [HttpPost]
+        public IActionResult SetLanguage(string culture, string returnUrl)
+        {
+            Response.Cookies.Append(CookieRequestCultureProvider.DefaultCookieName,
+                CookieRequestCultureProvider.MakeCookieValue(new RequestCulture(culture)),
+                new CookieOptions { Expires = DateTimeOffset.UtcNow.AddYears(1) });
+
+            return LocalRedirect(returnUrl);
+        }
     }
 }
