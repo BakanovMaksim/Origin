@@ -25,21 +25,22 @@ namespace ApplicationOrigin.Controllers
         }
 
         #region Главная
-        [AllowAnonymous]
         public IActionResult HomePage()
         {
             if (!string.IsNullOrEmpty(User.Identity.Name)) ViewBag.Message = User.Identity.Name;
             else ViewBag.Message = "None";
+
+            var user = Db.GetUserLogin(User.Identity.Name);
+            if(user != null) ViewBag.CurrentCulture = user.Culture;
 
             return View(Db.GetUsers());
         }
         #endregion
 
         #region Информация
-        [Authorize(Roles ="Administrator, Visitor")]
         public IActionResult InformationPage(int id)
         {
-            if (Db.GetUser(id) != null) return View(Db.GetUser(id));
+            if (Db.GetUserId(id) != null) return View(Db.GetUserId(id));
 
             _logger.LogWarning("Просмотр информации не возможен.", id);
 
@@ -49,16 +50,16 @@ namespace ApplicationOrigin.Controllers
 
         #region Изменение данных
         [HttpGet]
-        [Authorize(Roles= "Administrator")]
+        [Authorize(Policy = "RolePolicy")]
         public IActionResult EditPage(int id)
         {
-            if (Db.GetUser(id) != null) return View(Db.GetUser(id));
+            if (Db.GetUserId(id) != null) return View(Db.GetUserId(id));
 
             return NotFound();
         }
 
         [HttpPost]
-        [Authorize(Roles = "Administrator")]
+        [Authorize(Policy = "RolePolicy")]
         public IActionResult EditPage(User user)
         {
             _logger.LogInformation("Данные пользователя получены.", nameof(user));
@@ -72,19 +73,19 @@ namespace ApplicationOrigin.Controllers
         #region Удаление данных
         [HttpGet]
         [ActionName("RemovePage")]
-        [Authorize(Roles = "Administrator")]
+        [Authorize(Policy = "RolePolicy")]
         public IActionResult ConfirmRemovePage(int id)
         {
-            if (Db.GetUser(id) != null) return View(Db.GetUser(id));
+            if (Db.GetUserId(id) != null) return View(Db.GetUserId(id));
 
             return NotFound();
         }
 
         [HttpPost]
-        [Authorize(Roles = "Administrator")]
+        [Authorize(Policy = "RolePolicy")]
         public IActionResult RemovePage(int id)
         {
-            if (Db.GetUser(id) != null) Db.Remove(Db.GetUser(id));
+            if (Db.GetUserId(id) != null) Db.Remove(Db.GetUserId(id));
 
             _logger.LogInformation("Пользователь успешно удален.", id);
 
@@ -95,6 +96,13 @@ namespace ApplicationOrigin.Controllers
         [HttpPost]
         public IActionResult SetLanguage(string culture, string returnUrl)
         {
+            var user = Db.GetUserLogin(User.Identity.Name);
+            if (user != null)
+            {
+                user.Culture = culture;
+                Db.Edit(user);
+            }
+            
             Response.Cookies.Append(CookieRequestCultureProvider.DefaultCookieName,
                 CookieRequestCultureProvider.MakeCookieValue(new RequestCulture(culture)),
                 new CookieOptions { Expires = DateTimeOffset.UtcNow.AddYears(1) });

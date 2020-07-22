@@ -7,25 +7,29 @@
     ViewBag.Title = "Изменение данных";
 }
 
-<form asp-action="EditPage" asp-controller="home" asp-route-id="@Model.Id">
-    <div asp-validation-summary="All"></div>
-    <div class="textbox">
-        <label asp-for="FirstName"></label>
-        <input type="text" asp-for="FirstName" placeholder="@Localizer["FirstNamePlaceHolder"]" />
-    </div>
-    <div class="textbox">
-        <label asp-for="LastName"></label>
-        <input type="text" asp-for="LastName" placeholder="@Localizer["LastNamePlaceHolder"]" />
-    </div>
-    <div class="textbox">
-        <label asp-for="Login"></label>
-        <input type="text" asp-for="Login" placeholder="@Localizer["LoginPlaceHolder"]" />
-    </div>
-    <div class="textbox">
-        <label asp-for="Password"></label>
-        <input type="password" asp-for="Password" placeholder="@Localizer["PasswordPlaceHolder"]" />
-    </div>
+    <form asp-action="EditPage" asp-controller="home" asp-route-id="@Model.Id">
+        <div asp-validation-summary="All"></div>
+        <div class="textbox">
+            <label asp-for="FirstName"></label>
+            <input type="text" asp-for="FirstName" placeholder="@Localizer["FirstNamePlaceHolder"]" />
+        </div>
+        <div class="textbox">
+            <label asp-for="LastName"></label>
+            <input type="text" asp-for="LastName" placeholder="@Localizer["LastNamePlaceHolder"]" />
+        </div>
+        <div class="textbox">
+            <label asp-for="BirthYear"></label>
+            <input type="text" asp-for="BirthYear" placeholder="Enter your year of birth" />
+        </div>
+        <div class="textbox">
+            <label asp-for="Login"></label>
+            <input type="text" asp-for="Login" placeholder="@Localizer["LoginPlaceHolder"]" />
+        </div>
+        <div class="textbox">
+            <label asp-for="Password"></label>
+            <input type="password" asp-for="Password" placeholder="@Localizer["PasswordPlaceHolder"]" />
+        </div>
 
-    <input class="button" type="submit" value="@Localizer["BtnSave"]" />
-</form>
+        <input class="button" type="submit" value="@Localizer["BtnSave"]" />
+    </form>
 

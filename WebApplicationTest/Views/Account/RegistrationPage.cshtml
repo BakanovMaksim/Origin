@@ -8,27 +8,33 @@
         <div asp-validation-summary="All"></div>
 
         <div class="textbox">
-            <label asp-for="Role"></label>
-            <select asp-for="Role" asp-items="@Html.GetEnumSelectList<Roles>()">
+            <label asp-for="Role">Role:</label>
+            <select asp-for="Role">
+                <option>Administrator</option>
+                <option>Visitor</option>
             </select>
         </div>
         <div class="textbox">
-            <label asp-for="FirstName"></label>
+            <label asp-for="FirstName">Name:</label>
             <input type="text" asp-for="FirstName" placeholder="Enter a name" />
         </div>
         <div class="textbox">
-            <label asp-for="LastName"></label>
+            <label asp-for="LastName">Surname:</label>
             <input type="text" asp-for="LastName" placeholder="Enter your last name" />
         </div>
         <div class="textbox">
-            <label asp-for="Login"></label>
+            <label asp-for="BirthYear">BirthYear:</label>
+            <input type="text" asp-for="BirthYear" placeholder="Enter your year of birth" />
+        </div>
+        <div class="textbox">
+            <label asp-for="Login">Login:</label>
             <input type="text" asp-for="Login" placeholder="Enter your username" />
         </div>
         <div class="textbox">
-            <label asp-for="Password"></label>
+            <label asp-for="Password">Password:</label>
             <input type="password" asp-for="Password" placeholder="Enter the password" />
         </div>
 
-            <input class="button" type="submit" value="Sign Up" />
+        <input class="button" type="submit" value="Sign Up" />
     </form>
 

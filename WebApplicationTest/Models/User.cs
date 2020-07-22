@@ -29,6 +29,13 @@ namespace ApplicationOrigin.Models
         public string LastName { get; set; }
 
         /// <summary>
+        /// Год рождения.
+        /// </summary>
+        [Display(Name ="Год рождения")]
+        [Required(ErrorMessage ="Пожалуйста, введите год рождения.")]
+        public int BirthYear { get; set; }
+
+        /// <summary>
         /// Логин.
         /// </summary>
         [Display(Name = "Login")]
@@ -44,11 +51,17 @@ namespace ApplicationOrigin.Models
         public string Password { get; set; }
 
         /// <summary>
+        /// Культура.
+        /// </summary>
+        [Display(Name ="Культура")]
+        public string Culture { get; set; }
+
+        /// <summary>
         /// Роль.
         /// </summary>
         [Display(Name = "Role")]
         [Required(ErrorMessage = "RoleRequired")]
-        public Roles Role { get; set; }
+        public string Role { get; set; }
 
         public override string ToString() => $"{FirstName} {LastName}";
     }

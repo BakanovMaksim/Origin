@@ -14,7 +14,14 @@ namespace ApplicationOrigin.Services
         /// </summary>
         /// <param name="id"> Идентификатор. </param>
         /// <returns> Пользователь. </returns>
-        User GetUser(int id);
+        User GetUserId(int id);
+
+        /// <summary>
+        /// Получение пользователя по логину.
+        /// </summary>
+        /// <param name="login"> Логин. </param>
+        /// <returns> Пользователь. </returns>
+        User GetUserLogin(string login);
 
         /// <summary>
         /// Загрузка всех пользователей.

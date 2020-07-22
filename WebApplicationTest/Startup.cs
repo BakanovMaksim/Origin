@@ -5,10 +5,14 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Localization;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using System.Globalization;
 using ApplicationOrigin.Data;
 using ApplicationOrigin.Services;
-using System.Globalization;
-using Microsoft.AspNetCore.Localization;
+using ApplicationOrigin.Auth;
+using ApplicationOrigin.Models;
 
 namespace ApplicationOrigin
 {
@@ -31,8 +35,14 @@ namespace ApplicationOrigin
                 .AddCookie(options =>
                 {
                     options.LoginPath = new Microsoft.AspNetCore.Http.PathString("/Account/AuthorizationPage");
-                    options.AccessDeniedPath = new Microsoft.AspNetCore.Http.PathString("/Account/AuthorizationPage");
+                    //options.AccessDeniedPath = new Microsoft.AspNetCore.Http.PathString("/Account/AuthorizationPage");
                 });
+            services.AddTransient<IAuthorizationHandler, RoleHandler>();
+            services.AddAuthorization(opts => {
+                opts.AddPolicy("RolePolicy",
+                    policy => policy.Requirements.Add(new RoleRequirement("Administrator")));
+            });
+
             services.AddLocalization(options => options.ResourcesPath = "Resources");
             services.AddControllersWithViews().AddDataAnnotationsLocalization().AddViewLocalization();
 

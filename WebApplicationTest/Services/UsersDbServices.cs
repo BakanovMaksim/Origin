@@ -21,11 +21,18 @@ namespace ApplicationOrigin.Services
             _logger.LogDebug("База данных пользователей.");
         }
 
-        public User GetUser(int id)
+        public User GetUserId(int id)
         {
             _logger.LogInformation("Получен идентификатор пользователя.", id);
 
             return UsersDbContext.People.FirstOrDefault(p => p.Id == id);
+        }
+
+        public User GetUserLogin(string login)
+        {
+            _logger.LogInformation("Получен логин пользователя.", login);
+
+            return UsersDbContext.People.FirstOrDefault(p => p.Login == login);
         }
 
         public IEnumerable<User> GetUsers() => UsersDbContext.People.ToList();

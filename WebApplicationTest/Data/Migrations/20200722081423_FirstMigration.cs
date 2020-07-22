@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace ApplicationOrigin.Migrations
 {
-    public partial class UsersMigration : Migration
+    public partial class FirstMigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -15,9 +15,11 @@ namespace ApplicationOrigin.Migrations
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     FirstName = table.Column<string>(nullable: false),
                     LastName = table.Column<string>(nullable: false),
+                    BirthYear = table.Column<int>(nullable: false),
                     Login = table.Column<string>(nullable: false),
                     Password = table.Column<string>(nullable: false),
-                    Role = table.Column<int>(nullable: false)
+                    Culture = table.Column<string>(nullable: true),
+                    Role = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
                 {

@@ -39,8 +39,8 @@ namespace ApplicationOrigin.Controllers
                 if (item.Login == user.Login && item.Password == user.Password)
                 {
                     _logger.LogInformation("Авторизация выполнена успешно.", nameof(user));
-
-                    await Authenticate(user);
+ 
+                    await Authenticate(Db.GetUserLogin(user.Login));
 
                     return RedirectToAction("HomePage", "Home");
                 }
@@ -71,23 +71,25 @@ namespace ApplicationOrigin.Controllers
 
             Db.Add(user);
 
-            await Authenticate(user);
+            await Authenticate(Db.GetUserLogin(user.Login));
 
             return RedirectToAction("HomePage", "Home");
         }
         #endregion
 
+        #region Аутентификация
         private async Task Authenticate(User user)
-        {
-            var claims = new List<Claim>
-            {
-                new Claim(ClaimsIdentity.DefaultNameClaimType, user.Login),
-                new Claim(ClaimsIdentity.DefaultRoleClaimType, user.Role.ToString())
-            };
+        { 
+               var claims = new List<Claim>
+                {
+                    new Claim(ClaimsIdentity.DefaultNameClaimType, user.Login),
+                    new Claim(ClaimTypes.Role, user.Role)
+                };        
 
-            var id = new ClaimsIdentity(claims, "ApplicationCookie", ClaimsIdentity.DefaultNameClaimType, ClaimsIdentity.DefaultRoleClaimType);
+            var id = new ClaimsIdentity(claims, "ApplicationCookie", ClaimsIdentity.DefaultNameClaimType, ClaimTypes.Role);
 
             await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(id));
         }
+        #endregion
     }
 }

@@ -13,7 +13,7 @@ namespace ApplicationOrigin.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "3.1.5")
+                .HasAnnotation("ProductVersion", "3.1.6")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             modelBuilder.Entity("ApplicationOrigin.Models.User", b =>
@@ -21,6 +21,12 @@ namespace ApplicationOrigin.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    b.Property<int>("BirthYear")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Culture")
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
 
                     b.Property<string>("FirstName")
                         .IsRequired()
@@ -38,8 +44,9 @@ namespace ApplicationOrigin.Migrations
                         .IsRequired()
                         .HasColumnType("longtext CHARACTER SET utf8mb4");
 
-                    b.Property<int>("Role")
-                        .HasColumnType("int");
+                    b.Property<string>("Role")
+                        .IsRequired()
+                        .HasColumnType("longtext CHARACTER SET utf8mb4");
 
                     b.HasKey("Id");
 
