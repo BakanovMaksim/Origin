@@ -35,7 +35,7 @@ namespace ApplicationOrigin
                 .AddCookie(options =>
                 {
                     options.LoginPath = new Microsoft.AspNetCore.Http.PathString("/Account/AuthorizationPage");
-                    //options.AccessDeniedPath = new Microsoft.AspNetCore.Http.PathString("/Account/AuthorizationPage");
+                    options.AccessDeniedPath = new Microsoft.AspNetCore.Http.PathString("/Account/AuthorizationPage");
                 });
             services.AddTransient<IAuthorizationHandler, RoleHandler>();
             services.AddAuthorization(opts => {

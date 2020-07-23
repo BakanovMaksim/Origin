@@ -17,8 +17,6 @@ namespace ApplicationOrigin.Services
         {
             UsersDbContext = usersDbContext;
             _logger = logger;
-
-            _logger.LogDebug("База данных пользователей.");
         }
 
         public User GetUserId(int id)

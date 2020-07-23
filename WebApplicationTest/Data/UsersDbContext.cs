@@ -9,11 +9,13 @@ namespace ApplicationOrigin.Data
     /// </summary>
     public class UsersDbContext : DbContext
     {
-        public UsersDbContext(DbContextOptions<UsersDbContext> options) : base(options) => Database.EnsureCreated();
+        public UsersDbContext(DbContextOptions<UsersDbContext> options) : base(options) { }
+
+        public UsersDbContext() { }
 
         /// <summary>
         /// Доступ к таблице people.
         /// </summary>
-        public DbSet<User> People { get; set; }
+        public virtual DbSet<User> People { get; set; }
     }
 }
