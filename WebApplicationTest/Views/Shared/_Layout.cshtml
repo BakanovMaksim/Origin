@@ -8,8 +8,11 @@
     <link rel="stylesheet" href="~/css/site.css" />
 </head>
 <body>
-    <div id="form">
-        @RenderBody()
+    <div class="decor">
+        <div class="form-left-decoration"></div>
+        <div class="form-right-decoration"></div>
+        <div class="circle"></div>
+        <div class="form-inner">@RenderBody()</div>
     </div>
 </body>
 </html>

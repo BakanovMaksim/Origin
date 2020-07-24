@@ -12,7 +12,6 @@ using System.Globalization;
 using ApplicationOrigin.Data;
 using ApplicationOrigin.Services;
 using ApplicationOrigin.Auth;
-using ApplicationOrigin.Models;
 
 namespace ApplicationOrigin
 {
@@ -62,6 +61,8 @@ namespace ApplicationOrigin
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            UpdateDatabase(app);
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -87,6 +88,19 @@ namespace ApplicationOrigin
                     name: "default",
                     pattern: "{controller=Home}/{action=HomePage}/{id?}");
             });
+        }
+
+        private static void UpdateDatabase(IApplicationBuilder app)
+        {
+            using (var serviceScope = app.ApplicationServices
+                .GetRequiredService<IServiceScopeFactory>()
+                .CreateScope())
+            {
+                using (var context = serviceScope.ServiceProvider.GetService<UsersDbContext>())
+                {
+                    context.Database.Migrate();
+                }
+            }
         }
     }
 }
