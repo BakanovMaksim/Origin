@@ -2,7 +2,7 @@
 @using Microsoft.AspNetCore.Localization
 @using Microsoft.AspNetCore.Mvc.Localization;
 @using Microsoft.Extensions.Options;
-@model System.Collections.Generic.IEnumerable<User>
+@model IEnumerable<User>
 
 @inject IViewLocalizer Localizer
 @inject IOptions<RequestLocalizationOptions> LocOptions
@@ -14,12 +14,6 @@
     var requestCulture = Context.Features.Get<IRequestCultureFeature>();
 
     var cultureItems = LocOptions.Value.SupportedUICultures.Select(p => new SelectListItem { Value = p.Name, Text = p.NativeName } ).ToList();
-    var items = new List<SelectListItem>();
-    foreach(var item in cultureItems)
-    {
-        if (item.Text == ViewBag.CurrentCulture) item.Selected = true;
-        //items.Add(item);
-    }
 }
 
 <!DOCTYPE html>
@@ -42,16 +36,20 @@
 
         <table class="table_users">
             <caption>@Localizer["TableName"]</caption>
-            <tr><th>№</th><th>@Localizer["UserColumn"]</th><th>@Localizer["RoleColumn"]</th></tr>
+            <tr><th>№</th>
+            <th>@Localizer["UserColumn"]</th>
+            <th>@Localizer["BirthYearColumn"]</th>
+            <th>@Localizer["RoleColumn"]</th></tr>
             @foreach (var item in Model)
             {
         <tr>
             <td>@item.Id</td>
             <td>@item</td>
+            <td>@item.BirthYear</td>
             <td>@item.Role</td>
-            <td><a asp-action="InformationPage" asp-controller="home" asp-route-id="@item.Id">@Localizer["BtnInfo"]</a></td>
-            <td><a asp-action="EditPage" asp-controller="home" asp-route-id="@item.Id">@Localizer["BtnEdit"]</a></td>
-            <td><a asp-action="RemovePage" asp-controller="home" asp-route-id="@item.Id">@Localizer["BtnRemove"]</a></td>
+            <td><a class="button" asp-action="InformationPage" asp-controller="home" asp-route-id="@item.Id">@Localizer["BtnInfo"]</a></td>
+            <td><a class="button" asp-action="EditPage" asp-controller="home" asp-route-id="@item.Id">@Localizer["BtnEdit"]</a></td>
+            <td><a class="button" asp-action="RemovePage" asp-controller="home" asp-route-id="@item.Id">@Localizer["BtnRemove"]</a></td>
         </tr>
             }
         </table>

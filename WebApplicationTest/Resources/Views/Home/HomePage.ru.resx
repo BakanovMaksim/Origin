@@ -121,6 +121,10 @@
     <value>Войти</value>
     <comment>Переход для авторизации.</comment>
   </data>
+  <data name="BirthYearColumn" xml:space="preserve">
+    <value>Год рождения</value>
+    <comment>Столбец с годом рождения пользователя в таблице.</comment>
+  </data>
   <data name="BtnEdit" xml:space="preserve">
     <value>Изменение</value>
     <comment>Кнопка редактирования данных пользователя.</comment>

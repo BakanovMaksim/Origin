@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using ApplicationOrigin.Models;
 using ApplicationOrigin.Services;
@@ -7,6 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Localization;
+using System.Collections.Generic;
 
 namespace ApplicationOrigin.Controllers
 {
@@ -25,15 +27,12 @@ namespace ApplicationOrigin.Controllers
         }
 
         #region Главная
-        public IActionResult HomePage()
+        public IActionResult HomePage(SortState sortOrder = SortState.NameAsc)
         {
             if (!string.IsNullOrEmpty(User.Identity.Name)) ViewBag.Message = User.Identity.Name;
             else ViewBag.Message = "None";
 
-            var user = Db.GetUserLogin(User.Identity.Name);
-            if(user != null) ViewBag.CurrentCulture = user.Culture;
-
-            return View(Db.GetUsers());
+            return View(Db.GetUsers().ToList());
         }
         #endregion
 

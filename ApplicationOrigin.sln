@@ -9,6 +9,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ApplicationOrigin.Test", "A
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{9C839D65-1B47-4334-9327-5730E2AB30DB}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{C6A16E23-47F0-42BF-A287-444BE0395113}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -28,6 +30,7 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
+		{CF4CE6E9-181B-4B20-B5ED-24A7D9208AB0} = {C6A16E23-47F0-42BF-A287-444BE0395113}
 		{BF7C0C7C-77B2-4AD2-A67E-4A4BF49F006C} = {9C839D65-1B47-4334-9327-5730E2AB30DB}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution

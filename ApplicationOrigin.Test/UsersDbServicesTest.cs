@@ -7,7 +7,9 @@ using Microsoft.Extensions.Logging;
 using ApplicationOrigin.Models;
 using ApplicationOrigin.Data;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.InMemory;
 using ApplicationOrigin.Services;
+using EntityFrameworkCore.Testing.Common.Extensions;
 
 namespace ApplicationOrigin.Test
 {
@@ -50,20 +52,38 @@ namespace ApplicationOrigin.Test
         }
 
         [Test]
-        public void Add_InputArgument_AddValue()
+        public void AddEditRemove_InputArgument_ResultedValue()
         {
-            // Arrange
-            var mockSet = new Mock<DbSet<User>>();
-            var mockContext = new Mock<UsersDbContext>();
+            //Arrange
+            DbContextOptions<UsersDbContext> options;
+            var builder = new DbContextOptionsBuilder<UsersDbContext>();
+            builder.UseInMemoryDatabase(databaseName: "users");
+            options = builder.Options;
 
-            mockContext.Setup(m => m.People).Returns(mockSet.Object);
+            var context = new UsersDbContext(options);
+            var repository = new UsersDbServices(context, new Logger<UsersDbServices>(new LoggerFactory()));
+            var user = new User { Id = 2, FirstName = "Дмитрий", LastName = "Широков", BirthYear = 2002, Login = "sgdgds", Password = "gsdgsd", Role = "Visitor", Culture = "ru" };
 
-            // Act
-            var repository = new UsersDbServices(mockContext.Object, new Logger<UsersDbServices>(new LoggerFactory()));
+            //Act
             repository.Add(new User { Id = 1, FirstName = "Максим", LastName = "Баканов", BirthYear = 1998, Login = "maks", Password = "batlenax", Role = "Administrator", Culture = "en" });
+            repository.Add(new User { Id = 2, FirstName = "Дмитрий", LastName = "Широков", BirthYear = 2002, Login = "sgdgds", Password = "gsdgsd", Role = "Visitor", Culture = "ru" });
+            repository.Add(new User { Id = 3, FirstName = "Сергей", LastName = "Ореховский", BirthYear = 2005, Login = "oreh", Password = "gsdgsdggsdgs", Role = "Visitor", Culture = "ru" });
 
-            // Assert
-            Assert.AreEqual(1, repository.GetUsers().Count());
+            var userRemove = repository.GetUserId(3);
+            if (userRemove != null) repository.Remove(userRemove);
+
+            if (repository.GetUserId(2) != null)
+            {
+                var userEdit = repository.GetUserId(2);
+                userEdit.FirstName = "Евгений";
+                repository.Edit(userEdit);
+            }
+
+            var actual = repository.GetUsers();
+            var actualEdit = repository.GetUserId(2);
+
+            Assert.AreEqual(2, actual.Count());
+            Assert.AreEqual("Евгений", actualEdit.FirstName);
         }
     }
 }
