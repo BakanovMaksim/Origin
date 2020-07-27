@@ -117,12 +117,24 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="NameAdmin" xml:space="preserve">
-    <value>Admin</value>
-    <comment>Роль пользователя Админ.</comment>
+  <data name="BirthDate" xml:space="preserve">
+    <value>Дата рождения</value>
+    <comment>Дата рождения.</comment>
   </data>
-  <data name="NameVisitor" xml:space="preserve">
-    <value>Visitor</value>
-    <comment>Роль пользователя Посетитель.</comment>
+  <data name="BtnRemove" xml:space="preserve">
+    <value>Удалить</value>
+    <comment>Кнопка удаления данных.</comment>
+  </data>
+  <data name="FirtsName" xml:space="preserve">
+    <value>Имя</value>
+    <comment>Имя.</comment>
+  </data>
+  <data name="LastName" xml:space="preserve">
+    <value>Фамилия</value>
+    <comment>Фамилия.</comment>
+  </data>
+  <data name="UserName" xml:space="preserve">
+    <value>Логин</value>
+    <comment>Логин.</comment>
   </data>
 </root>

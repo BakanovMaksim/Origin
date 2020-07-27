@@ -9,9 +9,7 @@
 
         <div class="textbox">
             <label asp-for="Role">Role:</label>
-            <select asp-for="Role">
-                <option>Administrator</option>
-                <option>Visitor</option>
+            <select asp-for="Role" asp-items="@Html.GetEnumSelectList<Roles>()">
             </select>
         </div>
         <div class="textbox">
@@ -23,8 +21,8 @@
             <input type="text" asp-for="LastName" placeholder="Enter your last name" />
         </div>
         <div class="textbox">
-            <label asp-for="BirthYear">BirthYear:</label>
-            <input type="text" asp-for="BirthYear" placeholder="Enter your year of birth" />
+            <label asp-for="BirthDate">Date of birth:</label>
+            <input type="date" asp-for="BirthDate"/>
         </div>
         <div class="textbox">
             <label asp-for="Login">Login:</label>

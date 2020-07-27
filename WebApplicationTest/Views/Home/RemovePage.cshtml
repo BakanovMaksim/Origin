@@ -1,36 +1,39 @@
-﻿@model User
+﻿@using Microsoft.AspNetCore.Mvc.Localization;
+@model User
 
 @{
     ViewBag.Title = "Удаление данных";
 }
 
+@inject IViewLocalizer Localizer
+
+<div>
+    <dl>
+        <dt>@Localizer["FirstName"]</dt>
+        <dd>
+            @Html.DisplayFor(x => x.FirstName)
+        </dd>
+
+        <dt>@Localizer["LastName"]</dt>
+        <dd>
+            @Html.DisplayFor(x => x.LastName)
+        </dd>
+
+        <dt>@Localizer["BirthDate"]</dt>
+        <dd>
+            @Html.DisplayFor(x => x.BirthDate)
+        </dd>
+
+        <dt>@Localizer["UserName"]</dt>
+        <dd>
+            @Html.DisplayFor(x => x.Login)
+        </dd>
+    </dl>
+
     <div>
-        <dl>
-            <dt>Имя</dt>
-            <dd>
-                @Html.DisplayFor(x => x.FirstName)
-            </dd>
-
-            <dt>Фамилия</dt>
-            <dd>
-                @Html.DisplayFor(x => x.LastName)
-            </dd>
-
-            <dt>Год рождения</dt>
-            <dd>
-                @Html.DisplayFor(x => x.BirthYear)
-            </dd>
-
-            <dt>Логин</dt>
-            <dd>
-                @Html.DisplayFor(x => x.Login)
-            </dd>
-        </dl>
-
-        <div>
-            <form asp-controller="home" asp-action="RemovePage" method="post">
-                <input class="button" type="submit" value="Удалить" />
-            </form>
-        </div>
+        <form asp-controller="home" asp-action="RemovePage" method="post">
+            <input class="button" type="submit" value="@Localizer["BtnRemove"]" />
+        </form>
     </div>
+</div>
 

@@ -1,26 +1,26 @@
-﻿using System;
-using System.Threading.Tasks;
-using System.Security.Claims;
-using System.Collections.Generic;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
+﻿using ApplicationOrigin.Models;
+using ApplicationOrigin.Services;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http;
-using ApplicationOrigin.Models;
-using ApplicationOrigin.Services;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+using System;
+using System.Collections.Generic;
+using System.Security.Claims;
+using System.Threading.Tasks;
 
 namespace ApplicationOrigin.Controllers
-{ 
+{
     public class AccountController : Controller
     {
         private readonly ILogger<AccountController> _logger;
 
-        public IDbLogic Db { get; }
+        private readonly IDbLogic _db;
 
         public AccountController(IDbLogic db, ILogger<AccountController> logger)
         {
-            Db = db;
+            _db = db;
             _logger = logger;
 
             _logger.LogDebug("Controller AccountController.");
@@ -35,12 +35,12 @@ namespace ApplicationOrigin.Controllers
         {
             _logger.LogInformation("Данные пользователя получены.", nameof(user));
 
-            foreach (var item in Db.GetUsers())
+            foreach (var item in _db.GetUsers())
                 if (item.Login == user.Login && item.Password == user.Password)
                 {
                     _logger.LogInformation("Авторизация выполнена успешно.", nameof(user));
- 
-                    await Authenticate(Db.GetUserLogin(user.Login));
+
+                    await Authenticate(_db.GetUserLogin(user.Login));
 
                     return RedirectToAction("HomePage", "Home");
                 }
@@ -69,9 +69,9 @@ namespace ApplicationOrigin.Controllers
                 return View();
             }
 
-            Db.Add(user);
+            _db.Add(user);
 
-            await Authenticate(Db.GetUserLogin(user.Login));
+            await Authenticate(_db.GetUserLogin(user.Login));
 
             return RedirectToAction("HomePage", "Home");
         }
@@ -79,12 +79,13 @@ namespace ApplicationOrigin.Controllers
 
         #region Аутентификация
         private async Task Authenticate(User user)
-        { 
-               var claims = new List<Claim>
+        {
+            var claims = new List<Claim>
                 {
                     new Claim(ClaimsIdentity.DefaultNameClaimType, user.Login),
-                    new Claim(ClaimTypes.Role, user.Role)
-                };        
+                    new Claim(ClaimTypes.Role, user.Role.ToString()),
+                    new Claim("culture", user.Culture)
+                };
 
             var id = new ClaimsIdentity(claims, "ApplicationCookie", ClaimsIdentity.DefaultNameClaimType, ClaimTypes.Role);
 

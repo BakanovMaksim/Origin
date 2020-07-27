@@ -1,15 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using ApplicationOrigin.Data;
+using ApplicationOrigin.Models;
+using ApplicationOrigin.Services;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
-using Microsoft.Extensions.Logging;
-using ApplicationOrigin.Models;
-using ApplicationOrigin.Data;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.InMemory;
-using ApplicationOrigin.Services;
-using EntityFrameworkCore.Testing.Common.Extensions;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace ApplicationOrigin.Test
 {
@@ -17,14 +15,14 @@ namespace ApplicationOrigin.Test
     public class UsersDbServicesTest
     {
         [Test]
-        public void GetUsers_InputArgument_ReturnValue()
+        public void GetUsersInputArgumentReturnValue()
         {
             //Arrange
             IQueryable<User> users = new List<User>
             {
                 new User
                 {
-                    Id = 1, FirstName = "Максим", LastName = "Баканов", BirthYear = 1998, Login = "maks", Password = "batlenax", Role = "Administrator", Culture = "en"
+                    Id = 1, FirstName = "Максим", LastName = "Баканов", BirthDate=new DateTime(1998,05,07), Login = "maks", Password = "batlenax", Role = Roles.Administrator, Culture = "en"
                 }
             }.AsQueryable();
 
@@ -42,7 +40,7 @@ namespace ApplicationOrigin.Test
             var actualGetUsers = repository.GetUsers();
             var actualGetUserId = repository.GetUserId(1);
             var actualGetUserLogin = repository.GetUserLogin("maks");
-            var result = repository.CheckNewUser(new User { Id = 3, FirstName = "Максим", LastName = "Баканов", BirthYear = 1998, Login = "makssg", Password = "batlenaxfgf", Role = "Administrator", Culture = "en" });
+            var result = repository.CheckNewUser(new User { Id = 3, FirstName = "Максим", LastName = "Баканов", BirthDate = new DateTime(1998, 05, 07), Login = "makssg", Password = "batlenaxfgf", Role = Roles.Administrator, Culture = "en" });
 
             //Assert
             Assert.AreEqual(1, actualGetUsers.Count());
@@ -52,7 +50,7 @@ namespace ApplicationOrigin.Test
         }
 
         [Test]
-        public void AddEditRemove_InputArgument_ResultedValue()
+        public void AddEditRemoveInputArgumentResultedValue()
         {
             //Arrange
             DbContextOptions<UsersDbContext> options;
@@ -62,12 +60,11 @@ namespace ApplicationOrigin.Test
 
             var context = new UsersDbContext(options);
             var repository = new UsersDbServices(context, new Logger<UsersDbServices>(new LoggerFactory()));
-            var user = new User { Id = 2, FirstName = "Дмитрий", LastName = "Широков", BirthYear = 2002, Login = "sgdgds", Password = "gsdgsd", Role = "Visitor", Culture = "ru" };
 
             //Act
-            repository.Add(new User { Id = 1, FirstName = "Максим", LastName = "Баканов", BirthYear = 1998, Login = "maks", Password = "batlenax", Role = "Administrator", Culture = "en" });
-            repository.Add(new User { Id = 2, FirstName = "Дмитрий", LastName = "Широков", BirthYear = 2002, Login = "sgdgds", Password = "gsdgsd", Role = "Visitor", Culture = "ru" });
-            repository.Add(new User { Id = 3, FirstName = "Сергей", LastName = "Ореховский", BirthYear = 2005, Login = "oreh", Password = "gsdgsdggsdgs", Role = "Visitor", Culture = "ru" });
+            repository.Add(new User { Id = 1, FirstName = "Максим", LastName = "Баканов", BirthDate = new DateTime(1998, 05, 07), Login = "maks", Password = "batlenax", Role = Roles.Administrator, Culture = "en" });
+            repository.Add(new User { Id = 2, FirstName = "Дмитрий", LastName = "Широков", BirthDate = new DateTime(2002, 09, 15), Login = "sgdgds", Password = "gsdgsd", Role = Roles.Visitor, Culture = "ru" });
+            repository.Add(new User { Id = 3, FirstName = "Сергей", LastName = "Ореховский", BirthDate = new DateTime(2005, 11, 25), Login = "oreh", Password = "gsdgsdggsdgs", Role = Roles.Visitor, Culture = "ru" });
 
             var userRemove = repository.GetUserId(3);
             if (userRemove != null) repository.Remove(userRemove);
@@ -82,6 +79,7 @@ namespace ApplicationOrigin.Test
             var actual = repository.GetUsers();
             var actualEdit = repository.GetUserId(2);
 
+            //Assert
             Assert.AreEqual(2, actual.Count());
             Assert.AreEqual("Евгений", actualEdit.FirstName);
         }

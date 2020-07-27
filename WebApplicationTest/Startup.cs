@@ -1,17 +1,17 @@
+using ApplicationOrigin.Auth;
+using ApplicationOrigin.Data;
+using ApplicationOrigin.Services;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Localization;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Localization;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using System.Globalization;
-using ApplicationOrigin.Data;
-using ApplicationOrigin.Services;
-using ApplicationOrigin.Auth;
 
 namespace ApplicationOrigin
 {
@@ -33,12 +33,13 @@ namespace ApplicationOrigin
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie(options =>
                 {
-                    options.LoginPath = new Microsoft.AspNetCore.Http.PathString("/Account/AuthorizationPage");
-                    options.AccessDeniedPath = new Microsoft.AspNetCore.Http.PathString("/Account/AuthorizationPage");
+                    options.LoginPath = new PathString("/Account/AuthorizationPage");
+                    options.AccessDeniedPath = new PathString("/Account/AuthorizationPage");
                 });
             services.AddTransient<IAuthorizationHandler, RoleHandler>();
-            services.AddAuthorization(opts => {
-                opts.AddPolicy("RolePolicy",
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("RolePolicy",
                     policy => policy.Requirements.Add(new RoleRequirement("Administrator")));
             });
 
@@ -56,6 +57,11 @@ namespace ApplicationOrigin
                 options.DefaultRequestCulture = new RequestCulture("en");
                 options.SupportedCultures = supportedCultures;
                 options.SupportedUICultures = supportedCultures;
+
+                options.RequestCultureProviders.Insert(0, new CustomRequestCultureProvider(async context =>
+                {
+                    return new ProviderCultureResult("");
+                }));
             });
         }
 

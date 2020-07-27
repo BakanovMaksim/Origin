@@ -1,6 +1,5 @@
-﻿using System;
+﻿using ApplicationOrigin.Models;
 using System.Collections.Generic;
-using ApplicationOrigin.Models;
 
 namespace ApplicationOrigin.Services
 {

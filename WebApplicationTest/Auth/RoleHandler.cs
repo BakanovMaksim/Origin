@@ -1,7 +1,6 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
-using Microsoft.AspNetCore.Authorization;
+using System.Threading.Tasks;
 
 namespace ApplicationOrigin.Auth
 {
@@ -11,8 +10,8 @@ namespace ApplicationOrigin.Auth
         RoleRequirement requirement)
         {
             if (context.User.HasClaim(c => c.Type == ClaimTypes.Role))
-            { 
-                if (context.User.FindFirst(c => c.Type == ClaimTypes.Role).Value == requirement.Role) 
+            {
+                if (context.User.FindFirst(c => c.Type == ClaimTypes.Role).Value == requirement.Role)
                 {
                     context.Succeed(requirement);
                 }

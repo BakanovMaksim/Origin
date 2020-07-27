@@ -31,9 +31,9 @@ namespace ApplicationOrigin.Models
         /// <summary>
         /// Год рождения.
         /// </summary>
-        [Display(Name ="Год рождения")]
-        [Required(ErrorMessage ="Пожалуйста, введите год рождения.")]
-        public int BirthYear { get; set; }
+        [Display(Name = "BirthDate")]
+        [Required(ErrorMessage = "BirthDateRequired")]
+        public DateTime BirthDate { get; set; }
 
         /// <summary>
         /// Логин.
@@ -47,13 +47,13 @@ namespace ApplicationOrigin.Models
         /// </summary>
         [Display(Name = "Password")]
         [Required(ErrorMessage = "PasswordRequired")]
-        [MinLength(8,ErrorMessage = "PasswordMinLength")]
+        [MinLength(8, ErrorMessage = "PasswordMinLength")]
         public string Password { get; set; }
 
         /// <summary>
         /// Культура.
         /// </summary>
-        [Display(Name ="Культура")]
+        [Display(Name = "Culture")]
         public string Culture { get; set; }
 
         /// <summary>
@@ -61,7 +61,7 @@ namespace ApplicationOrigin.Models
         /// </summary>
         [Display(Name = "Role")]
         [Required(ErrorMessage = "RoleRequired")]
-        public string Role { get; set; }
+        public Roles Role { get; set; }
 
         public override string ToString() => $"{FirstName} {LastName}";
     }

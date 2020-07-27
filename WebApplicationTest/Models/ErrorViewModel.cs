@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace ApplicationOrigin.Models
+﻿namespace ApplicationOrigin.Models
 {
     public class ErrorViewModel
     {

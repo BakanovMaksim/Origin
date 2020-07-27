@@ -1,14 +1,12 @@
-﻿using System;
-using System.Linq;
-using Microsoft.AspNetCore.Mvc;
-using ApplicationOrigin.Models;
+﻿using ApplicationOrigin.Models;
 using ApplicationOrigin.Services;
-using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Localization;
-using System.Collections.Generic;
+using Microsoft.AspNetCore.Localization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
+using System;
+using System.Linq;
 
 namespace ApplicationOrigin.Controllers
 {
@@ -16,30 +14,30 @@ namespace ApplicationOrigin.Controllers
     {
         private readonly ILogger<HomeController> _logger;
 
-        public IDbLogic Db { get; }
+        private readonly IDbLogic _db;
 
         public HomeController(IDbLogic db, ILogger<HomeController> logger)
         {
-            Db = db;
+            _db = db;
             _logger = logger;
 
             _logger.LogDebug("Controller HomeController.");
         }
 
         #region Главная
-        public IActionResult HomePage(SortState sortOrder = SortState.NameAsc)
+        public IActionResult HomePage()
         {
             if (!string.IsNullOrEmpty(User.Identity.Name)) ViewBag.Message = User.Identity.Name;
             else ViewBag.Message = "None";
 
-            return View(Db.GetUsers().ToList());
+            return View(_db.GetUsers().ToList());
         }
         #endregion
 
         #region Информация
         public IActionResult InformationPage(int id)
         {
-            if (Db.GetUserId(id) != null) return View(Db.GetUserId(id));
+            if (_db.GetUserId(id) != null) return View(_db.GetUserId(id));
 
             _logger.LogWarning("Просмотр информации не возможен.", id);
 
@@ -52,7 +50,7 @@ namespace ApplicationOrigin.Controllers
         [Authorize(Policy = "RolePolicy")]
         public IActionResult EditPage(int id)
         {
-            if (Db.GetUserId(id) != null) return View(Db.GetUserId(id));
+            if (_db.GetUserId(id) != null) return View(_db.GetUserId(id));
 
             return NotFound();
         }
@@ -63,7 +61,7 @@ namespace ApplicationOrigin.Controllers
         {
             _logger.LogInformation("Данные пользователя получены.", nameof(user));
 
-            Db.Edit(user);
+            _db.Edit(user);
 
             return RedirectToAction("HomePage");
         }
@@ -75,7 +73,7 @@ namespace ApplicationOrigin.Controllers
         [Authorize(Policy = "RolePolicy")]
         public IActionResult ConfirmRemovePage(int id)
         {
-            if (Db.GetUserId(id) != null) return View(Db.GetUserId(id));
+            if (_db.GetUserId(id) != null) return View(_db.GetUserId(id));
 
             return NotFound();
         }
@@ -84,7 +82,7 @@ namespace ApplicationOrigin.Controllers
         [Authorize(Policy = "RolePolicy")]
         public IActionResult RemovePage(int id)
         {
-            if (Db.GetUserId(id) != null) Db.Remove(Db.GetUserId(id));
+            if (_db.GetUserId(id) != null) _db.Remove(_db.GetUserId(id));
 
             _logger.LogInformation("Пользователь успешно удален.", id);
 
@@ -95,13 +93,13 @@ namespace ApplicationOrigin.Controllers
         [HttpPost]
         public IActionResult SetLanguage(string culture, string returnUrl)
         {
-            var user = Db.GetUserLogin(User.Identity.Name);
+            var user = _db.GetUserLogin(User.Identity.Name);
             if (user != null)
             {
                 user.Culture = culture;
-                Db.Edit(user);
+                _db.Edit(user);
             }
-            
+
             Response.Cookies.Append(CookieRequestCultureProvider.DefaultCookieName,
                 CookieRequestCultureProvider.MakeCookieValue(new RequestCulture(culture)),
                 new CookieOptions { Expires = DateTimeOffset.UtcNow.AddYears(1) });

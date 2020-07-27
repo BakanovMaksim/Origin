@@ -1,9 +1,9 @@
-﻿using System;
-using System.Linq;
-using System.Collections.Generic;
+﻿using ApplicationOrigin.Data;
 using ApplicationOrigin.Models;
-using ApplicationOrigin.Data;
 using Microsoft.Extensions.Logging;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace ApplicationOrigin.Services
 {
@@ -11,11 +11,11 @@ namespace ApplicationOrigin.Services
     {
         private readonly ILogger<UsersDbServices> _logger;
 
-        public UsersDbContext UsersDbContext { get; }
+        private readonly UsersDbContext _usersDbContext;
 
-        public UsersDbServices(UsersDbContext usersDbContext,ILogger<UsersDbServices> logger)
+        public UsersDbServices(UsersDbContext usersDbContext, ILogger<UsersDbServices> logger)
         {
-            UsersDbContext = usersDbContext;
+            _usersDbContext = usersDbContext;
             _logger = logger;
         }
 
@@ -23,26 +23,26 @@ namespace ApplicationOrigin.Services
         {
             _logger.LogInformation("Получен идентификатор пользователя.", id);
 
-            return UsersDbContext.People.FirstOrDefault(p => p.Id == id);
+            return _usersDbContext.People.FirstOrDefault(p => p.Id == id);
         }
 
         public User GetUserLogin(string login)
         {
             _logger.LogInformation("Получен логин пользователя.", login);
 
-            return UsersDbContext.People.FirstOrDefault(p => p.Login == login);
+            return _usersDbContext.People.FirstOrDefault(p => p.Login == login);
         }
 
-        public IEnumerable<User> GetUsers() => UsersDbContext.People.ToList();
+        public IEnumerable<User> GetUsers() => _usersDbContext.People.ToList();
 
         public void Add(User user)
         {
             _logger.LogInformation("Данные пользователя получены.", nameof(user));
 
             if (CheckNewUser(user))
-            { 
-                UsersDbContext.People.Add(user);
-                UsersDbContext.SaveChanges();
+            {
+                _usersDbContext.People.Add(user);
+                _usersDbContext.SaveChanges();
 
                 _logger.LogInformation("Пользователь добавлен в базу данных.", nameof(user));
             }
@@ -54,16 +54,16 @@ namespace ApplicationOrigin.Services
         {
             _logger.LogInformation("Данные пользователя получены.", nameof(user));
 
-            UsersDbContext.People.Update(user);
-            UsersDbContext.SaveChanges();
+            _usersDbContext.People.Update(user);
+            _usersDbContext.SaveChanges();
         }
 
         public void Remove(User user)
         {
             _logger.LogInformation("Данные пользователя получены.", nameof(user));
 
-            UsersDbContext.People.Remove(user);
-            UsersDbContext.SaveChanges();
+            _usersDbContext.People.Remove(user);
+            _usersDbContext.SaveChanges();
         }
 
         public bool CheckNewUser(User user)

@@ -1,6 +1,5 @@
-﻿using System;
+﻿using ApplicationOrigin.Models;
 using Microsoft.EntityFrameworkCore;
-using ApplicationOrigin.Models;
 
 namespace ApplicationOrigin.Data
 {
